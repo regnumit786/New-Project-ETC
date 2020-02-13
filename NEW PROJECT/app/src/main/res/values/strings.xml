@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Toll_Car</string>
+    <string name="title_activity_login_view">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="vehivle_number">EX.DHAKA METRO-DA-XX-XXXX</string>
+
+    <!-- invalid enter text -->
+    <string name="enter_name">Must enter name</string>
+    <string name="enter_mobile">Must enter mobile</string>
+    <string name="enter_acno">Must enter account no</string>
+    <string name="enter_password">Must enter password</string>
+    <string name="enter_rePassword">Must enter rePassword</string>
+
+    <string name="user_mobile">Mobile</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="already">already sign up? <font color='red'>log in</font></string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="regnum_toll">Regnum ETC</string>
+    <string name="regnum_email">regnumit786@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="log_out">log out</string>
+    <string name="ocr_activity">OCR Activity</string>
+    <string name="update">Update</string>
+
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+</resources>

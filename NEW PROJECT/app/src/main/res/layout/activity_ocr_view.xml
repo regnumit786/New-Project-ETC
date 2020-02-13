@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:background="@drawable/gradent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:text="Owner"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/woner_name"
+            android:layout_marginBottom="20dp"
+            android:hint="ENTER OWNER NAME"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:background="@drawable/bg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+        <TextView
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:text="Bank Account"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/account_number"
+            android:layout_marginBottom="20dp"
+            android:hint="ENTER ACCOUNT NUMBER"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:background="@drawable/bg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+
+        <TextView
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:text="Vehicle Number"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/vehicle_number"
+            android:hint="@string/vehivle_number"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:background="@drawable/bg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+        <TextView
+            android:layout_marginBottom="20dp"
+            android:textSize="10sp"
+            android:text="@string/vehivle_number"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:text="Chasis Number"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/chasis_number"
+            android:layout_marginBottom="20dp"
+            android:hint="ENTER CHASIS NUMBER"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:background="@drawable/bg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+
+        <TextView
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:text="Upload Registration Card / Blue Book "
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
+
+
+        <LinearLayout
+            android:id="@+id/camera_layout"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg"
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_gravity="center"
+                android:src="@drawable/camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_margin="20dp"
+            android:id="@+id/submite_btn"
+            android:text="submit"
+            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

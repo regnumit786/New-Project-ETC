@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.OTP"
+    android:orientation="vertical"
+    android:gravity="top|center"
+    android:paddingTop="100sp"
+    android:background="@drawable/gradent">
+
+    <EditText
+        android:id="@+id/receiveOTP"
+        android:layout_width="200sp"
+        android:layout_height="40sp"
+        android:padding="10sp"
+        android:textColor="@color/black"
+        android:background="@drawable/round"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:inputType="number"
+        android:hint="your otp"/>
+
+    <Button
+        android:id="@+id/receiveOTPBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:onClick="SendOTP"
+        android:text="send"/>
+</LinearLayout>

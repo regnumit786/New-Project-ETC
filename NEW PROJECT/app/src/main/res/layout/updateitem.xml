@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradent">
+
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/update_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:drawableLeft="@drawable/ic_person_name"
+                android:drawablePadding="16dp"
+                android:hint="name"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/update_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:drawableLeft="@drawable/ic_local_phone"
+                android:drawablePadding="16dp"
+                android:hint="01717722666"
+                android:maxLength="11"
+                android:inputType="number"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:singleLine="true" />
+
+
+            <EditText
+                android:id="@+id/update_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:drawableLeft="@drawable/ic_email"
+                android:drawablePadding="16dp"
+                android:hint="belal@gmail.com"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btn_update"
+                android:layout_marginBottom="5sp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/roundupdate"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:onClick="UpdateProfile"
+                android:text="Update"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
