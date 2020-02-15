@@ -11,6 +11,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.car.toll_car.Model.Example;
 import com.car.toll_car.Model.PostRequestModel;
 import com.car.toll_car.Model.Retrofit.ApiClint;
 import com.car.toll_car.Model.Retrofit.RetrofitClint;
@@ -37,6 +39,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -47,12 +50,12 @@ import retrofit2.Response;
 public class SignupActivityView extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private Button btnSignUp;
-    EditText inputName, inputNumber, inputEmail, inputPassword, inputRePassword;
+    private EditText inputName, inputNumber, inputEmail, inputPassword, inputRePassword;
     private ApiClint apiClint;
     private int count=0;
-    PostRequestModel postRequestModel;
     private TextView alreadySginUp;
     int randomOTPnumber;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,24 +83,15 @@ public class SignupActivityView extends AppCompatActivity {
         Validity();
         if (count>0){
             Toast.makeText(SignupActivityView.this, "All are OK", Toast.LENGTH_SHORT).show();
-            SendOTP();
-            Intent intent= new Intent(SignupActivityView.this, OTP.class);
+            //SendOTP();
+            Intent intent= new Intent(SignupActivityView.this, Profile.class);
             Log.e("otp_log_number",String.valueOf(randomOTPnumber));
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("name",inputName.getText().toString());
-            editor.putString("email",inputEmail.getText().toString());
-            editor.putString("mobile",inputNumber.getText().toString());
-            editor.putInt("OTP_PIN", randomOTPnumber);
-            editor.apply();
-            editor.commit();
+            DataStore();
             //NotificationGenerate();
             startActivity(intent);
 
             PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
                     inputPassword.getText().toString(), inputNumber.getText().toString());
-
             setNullEditText();
         }
     }
@@ -121,6 +115,7 @@ public class SignupActivityView extends AppCompatActivity {
         notificationManager.notify(0, notification.build());
     }
 
+    // OTP method are skip
     private void SendOTP() {
 
         try {
@@ -189,42 +184,23 @@ public class SignupActivityView extends AppCompatActivity {
 
     private void PostApi(final String name, final String email, final String password, final String mobile){
 
-        apiClint= RetrofitClint.getRetrifitClint().create(ApiClint.class);
-        Call<PostRequestModel> call= apiClint.post(name, email, password, mobile);
+        apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
+        Example example= new Example(name, email, password, mobile);
+        Call<List<Example>> call= apiClint.post(example);
 
-        call.enqueue(new Callback<PostRequestModel>() {
+        call.enqueue(new Callback<List<Example>>() {
             @Override
-            public void onResponse(Call<PostRequestModel> call, Response<PostRequestModel> response) {
-                if (!response.isSuccessful()){
-                    Log.e("request_code_not_match",String.valueOf(response.code()));
-                    Toast.makeText(SignupActivityView.this, "server unsuccessful", Toast.LENGTH_SHORT).show();
-                    return;
+            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+                if (response.isSuccessful()){
+                    Log.e("request_code_match",String.valueOf(response.code()));
+                    Toast.makeText(SignupActivityView.this, "Data Post successful", Toast.LENGTH_SHORT).show();
                 }
-
-                /*if (response.code() == 200){
-                    Log.e("responced_code",String.valueOf(response.code()));
-                    Toast.makeText(SignupActivityView.this, "code oky", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e("responced_code_failed",String.valueOf(response.code()));
-                }
-
-                PostRequestModel postRequestModel = response.body();
-                int statusCode = response.code();
-                String name = postRequestModel.getName();
-                String email = postRequestModel.getEmail();
-                String pass = postRequestModel.getPassword();
-                String mobile = postRequestModel.getMobile();
-
-                Log.e("inputName", name);
-                Log.e("inputEmail", email);
-                Log.e("inputPassword", password);
-                Log.e("inputMobile", mobile);*/
-
+                Log.e("Working_process_are_ok", String.valueOf(response.code()));
             }
 
             @Override
-            public void onFailure(Call<PostRequestModel> call, Throwable t) {
-                Log.e("server failed",t.getMessage());
+            public void onFailure(Call<List<Example>> call, Throwable t) {
+                Log.e("server_failed",t.getMessage());
             }
         });
     }
@@ -237,9 +213,27 @@ public class SignupActivityView extends AppCompatActivity {
         inputRePassword.setText("");
     }
 
+    private void DataStore(){
+        preferences = getSharedPreferences("LogedDataStore", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("LogedName",inputName.getText().toString());
+        editor.putString("LogedEmail",inputEmail.getText().toString());
+        editor.putString("LogedMobile",inputNumber.getText().toString());
+        editor.putString("LogedPassword",inputPassword.getText().toString());
+        editor.putInt("OTP_PIN", randomOTPnumber);
+        editor.apply();
+        editor.commit();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-
+        preferences = getSharedPreferences("LogedDataStore", Context.MODE_PRIVATE);
+        String status= preferences.getString("LogedMobile","default");
+        Log.e("status", status);
+        if (!status.isEmpty()){
+            Toast.makeText(this, "Data already stored", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, Profile.class));
+        }
     }
 }

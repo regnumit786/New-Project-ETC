@@ -37,10 +37,20 @@
     <string name="menu_share">Share</string>
     <string name="log_out">log out</string>
     <string name="ocr_activity">OCR Activity</string>
-    <string name="update">Update</string>
+    <string name="update">Update Name &amp; Email</string>
 
 
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <string name="name">Name</string>
+    <string name="email">Like: regnum786@gmail.com</string>
+    <string name="sign_in_number">Enter sign in mobile number</string>
+
+    <string name="Email">Email</string>
+    <string name="Phone">Phone</string>
+    <string name="account">Bank Account</string>
+    <string name="vehicle_num">vehicle Number</string>
+    <string name="vehicle_theses">Vehicle Theses</string>
 
 </resources>
