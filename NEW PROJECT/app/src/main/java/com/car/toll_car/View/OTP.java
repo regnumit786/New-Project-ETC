@@ -37,7 +37,7 @@ public class OTP extends AppCompatActivity {
 
         if (receiveOTP == otp){
             Toast.makeText(this, "Sign Up Successfully", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(OTP.this, Profile.class));
+            startActivity(new Intent(OTP.this, Dashboard.class));
         }else {
             Toast.makeText(this, "Wrong OTP", Toast.LENGTH_SHORT).show();
         }

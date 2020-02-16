@@ -21,7 +21,7 @@
     <string name="user_mobile">Mobile</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="already">already sign up? <font color='red'>log in</font></string>
+    <string name="already">i have no account? <font color='red'>Sign up</font></string>
     <string name="title_activity_profile">Profile</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -36,8 +36,9 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="log_out">log out</string>
-    <string name="ocr_activity">OCR Activity</string>
+    <string name="car_registration">Car Registration</string>
     <string name="update">Update Name &amp; Email</string>
+    <string name="profile">Profile</string>
 
 
     <string name="open">Open</string>
@@ -52,5 +53,9 @@
     <string name="account">Bank Account</string>
     <string name="vehicle_num">vehicle Number</string>
     <string name="vehicle_theses">Vehicle Theses</string>
+    <string name="sign_up">Sign Up</string>
+
+    <string name="Confirm_password">Confirm password</string>
+    <string name="communicate">Communicate</string>
 
 </resources>

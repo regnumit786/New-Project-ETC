@@ -4,26 +4,34 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_person_name"
+            android:title="@string/profile" />
+
         <item
             android:id="@+id/update"
             android:icon="@drawable/ic_update"
             android:title="@string/update" />
         <item
             android:id="@+id/ocr_activity"
-            android:icon="@drawable/ic_menu_send"
-            android:title="@string/ocr_activity" />
+            android:icon="@drawable/car"
+            android:title="@string/car_registration" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/menu_share" />
             <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_all_out"
+                android:id="@+id/nav_log_out"
+                android:icon="@drawable/ic_logout"
+                android:iconTint="@color/white"
                 android:title="@string/log_out" />
+
         </menu>
     </item>
 

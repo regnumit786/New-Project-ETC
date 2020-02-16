@@ -3,37 +3,26 @@ package com.car.toll_car.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.car.toll_car.Model.Example;
-import com.car.toll_car.Model.PostRequestModel;
 import com.car.toll_car.Model.Retrofit.ApiClint;
 import com.car.toll_car.Model.Retrofit.RetrofitClint;
 import com.car.toll_car.R;
-import com.car.toll_car.SMSBroadcast.SmsReceive;
 import com.car.toll_car.ViewModel.LoginViewModel;
-import com.google.android.gms.auth.api.signin.internal.SignInHubActivity;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -41,7 +30,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,9 +41,9 @@ public class SignupActivityView extends AppCompatActivity {
     private EditText inputName, inputNumber, inputEmail, inputPassword, inputRePassword;
     private ApiClint apiClint;
     private int count=0;
-    private TextView alreadySginUp;
     int randomOTPnumber;
     private SharedPreferences preferences;
+    private long backPressTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +58,6 @@ public class SignupActivityView extends AppCompatActivity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-        alreadySginUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SignupActivityView.this,LoginActivityView.class));
-            }
-        });
     }
 
     public void SignUpBtn(View view) {
@@ -84,7 +65,7 @@ public class SignupActivityView extends AppCompatActivity {
         if (count>0){
             Toast.makeText(SignupActivityView.this, "All are OK", Toast.LENGTH_SHORT).show();
             //SendOTP();
-            Intent intent= new Intent(SignupActivityView.this, Profile.class);
+            Intent intent= new Intent(SignupActivityView.this, Dashboard.class);
             Log.e("otp_log_number",String.valueOf(randomOTPnumber));
             DataStore();
             //NotificationGenerate();
@@ -179,7 +160,6 @@ public class SignupActivityView extends AppCompatActivity {
         inputPassword= findViewById(R.id.input_password);
         inputRePassword= findViewById(R.id.input_re_password);
         btnSignUp= findViewById(R.id.btn_signup);
-        alreadySginUp= findViewById(R.id.already_sign_up);
     }
 
     private void PostApi(final String name, final String email, final String password, final String mobile){
@@ -220,20 +200,20 @@ public class SignupActivityView extends AppCompatActivity {
         editor.putString("LogedEmail",inputEmail.getText().toString());
         editor.putString("LogedMobile",inputNumber.getText().toString());
         editor.putString("LogedPassword",inputPassword.getText().toString());
+        editor.putString("LogedrePassword",inputRePassword.getText().toString());
         editor.putInt("OTP_PIN", randomOTPnumber);
         editor.apply();
         editor.commit();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        preferences = getSharedPreferences("LogedDataStore", Context.MODE_PRIVATE);
-        String status= preferences.getString("LogedMobile","default");
-        Log.e("status", status);
-        if (!status.isEmpty()){
-            Toast.makeText(this, "Data already stored", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, Profile.class));
+    public void onBackPressed() {
+        if (backPressTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+            finish();
+        } else {
+            Toast.makeText(this, "press again for exit", Toast.LENGTH_SHORT).show();
         }
+        backPressTime = System.currentTimeMillis();
     }
 }

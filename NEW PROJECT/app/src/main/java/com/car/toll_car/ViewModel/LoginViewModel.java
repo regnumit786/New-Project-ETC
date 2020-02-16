@@ -10,8 +10,8 @@ import com.car.toll_car.Model.LoginModel;
 import com.car.toll_car.Model.SignUpModel;
 
 public class LoginViewModel extends AndroidViewModel {
-    SignUpModel signUpModel;
-    LoginModel loginModel;
+    private SignUpModel signUpModel;
+    private LoginModel loginModel;
     public LoginViewModel(@NonNull Application application) {
         super(application);
 
