@@ -28,6 +28,7 @@ public class Profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        setTitle("Profile");
 
         InitialView();
         getSharepreferance();
@@ -55,6 +56,8 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    /*
+
     private void getPost(){
         apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
         Call<List<Example>> call= apiClint.getPostData();
@@ -64,7 +67,7 @@ public class Profile extends AppCompatActivity {
                 if (response.code() == 200){
                     Log.e("response_successfully",String.valueOf(response.code()));
 
-                    /*List<Example> example= response.body();
+                    *//*List<Example> example= response.body();
                     String nn= null, ee= null, pp= null;
 
                     for (Example example1: example){
@@ -74,7 +77,7 @@ public class Profile extends AppCompatActivity {
                     }
                     profileName.setText(nn);
                     profileEmail.setText(ee);
-                    profilePhone.setText(pp);*/
+                    profilePhone.setText(pp);*//*
 
                 } else {
                     Toast.makeText(Profile.this, "Server request failed", Toast.LENGTH_SHORT).show();
@@ -90,4 +93,6 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+
+    */
 }

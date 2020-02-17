@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "810986972738",
+    "firebase_url": "https://etc-tollcar.firebaseio.com",
+    "project_id": "etc-tollcar",
+    "storage_bucket": "etc-tollcar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810986972738:android:903c3616c207825bc16fdb",
+        "android_client_info": {
+          "package_name": "com.car.toll_car"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810986972738-t520mopujlocu2u9gnbso2u2fh73cugh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.car.toll_car",
+            "certificate_hash": "f22a6f83bc35222bcc8e1dddbb1dbdeadf18151c"
+          }
+        },
+        {
+          "client_id": "810986972738-099uunh5jq5pupouq15db393ghto01nu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh3JWtiR-Y61jMOfujAWwtuu5XFy9HMdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810986972738-099uunh5jq5pupouq15db393ghto01nu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

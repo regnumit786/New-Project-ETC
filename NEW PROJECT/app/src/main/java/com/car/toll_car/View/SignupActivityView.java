@@ -44,6 +44,7 @@ public class SignupActivityView extends AppCompatActivity {
     int randomOTPnumber;
     private SharedPreferences preferences;
     private long backPressTime;
+    String number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +66,21 @@ public class SignupActivityView extends AppCompatActivity {
         if (count>0){
             Toast.makeText(SignupActivityView.this, "All are OK", Toast.LENGTH_SHORT).show();
             //SendOTP();
-            Intent intent= new Intent(SignupActivityView.this, Dashboard.class);
-            Log.e("otp_log_number",String.valueOf(randomOTPnumber));
+            Intent intent= new Intent(SignupActivityView.this, OTP.class);
             DataStore();
-            //NotificationGenerate();
-            startActivity(intent);
-
+            NotificationGenerate();
             PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
                     inputPassword.getText().toString(), inputNumber.getText().toString());
+
+            number= inputNumber.getText().toString().trim();
+            if (number.isEmpty() || number.length() < 11) {
+                inputNumber.setError("Valid number is required");
+                inputNumber.requestFocus();
+            }
+            String phoneNumber= "+88" + number;
+            intent.putExtra("phoneNumber",phoneNumber);
+            Log.e("Verification_Number",phoneNumber);
+            startActivity(intent);
             setNullEditText();
         }
     }
@@ -85,8 +93,9 @@ public class SignupActivityView extends AppCompatActivity {
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Regnum Toll OTP")
-                .setContentText(String.valueOf(randomOTPnumber))
+                .setContentText(inputNumber.getText().toString())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setColor(Color.BLUE)
                 //.setOnlyAlertOnce(true)
                 .addAction(R.drawable.logo, "Verify This", pendingIntent)
@@ -165,12 +174,11 @@ public class SignupActivityView extends AppCompatActivity {
     private void PostApi(final String name, final String email, final String password, final String mobile){
 
         apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
-        Example example= new Example(name, email, password, mobile);
-        Call<List<Example>> call= apiClint.post(example);
-
-        call.enqueue(new Callback<List<Example>>() {
+        Call<Example> call= apiClint.post(name, email, password, mobile);
+        Log.e("signing_test_name", name);
+        call.enqueue(new Callback<Example>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<Example> call, Response<Example> response) {
                 if (response.isSuccessful()){
                     Log.e("request_code_match",String.valueOf(response.code()));
                     Toast.makeText(SignupActivityView.this, "Data Post successful", Toast.LENGTH_SHORT).show();
@@ -179,7 +187,7 @@ public class SignupActivityView extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<Example> call, Throwable t) {
                 Log.e("server_failed",t.getMessage());
             }
         });

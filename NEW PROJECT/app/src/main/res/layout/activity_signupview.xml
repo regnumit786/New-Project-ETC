@@ -40,9 +40,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Registation your car and save your time"
+                    android:text="@string/front_text"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     app:fontFamily="cursive" />
 
                 <TextView
@@ -73,7 +73,7 @@
                     android:layout_marginBottom="12dp"
                     android:drawableLeft="@drawable/ic_person_name"
                     android:drawablePadding="16dp"
-                    android:hint="name"
+                    android:hint="@string/name"
                     android:maxLines="1"
                     android:padding="12dp"
                     android:singleLine="true" />
@@ -87,7 +87,7 @@
                     android:layout_marginBottom="12dp"
                     android:drawableLeft="@drawable/ic_local_phone"
                     android:drawablePadding="16dp"
-                    android:hint="01717722666"
+                    android:hint="@string/mobile"
                     android:maxLength="11"
                     android:inputType="number"
                     android:maxLines="1"
@@ -115,7 +115,7 @@
                     android:layout_marginBottom="12dp"
                     android:drawableLeft="@drawable/ic_email"
                     android:drawablePadding="16dp"
-                    android:hint="belal@gmail.com"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:padding="12dp"
@@ -128,7 +128,7 @@
                     android:layout_marginBottom="12dp"
                     android:drawableLeft="@drawable/ic_lock"
                     android:drawablePadding="16dp"
-                    android:hint="password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:padding="12dp"

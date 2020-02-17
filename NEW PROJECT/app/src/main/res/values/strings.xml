@@ -46,6 +46,7 @@
 
     <string name="name">Name</string>
     <string name="email">Like: regnum786@gmail.com</string>
+    <string name="mobile">01717722666</string>
     <string name="sign_in_number">Enter sign in mobile number</string>
 
     <string name="Email">Email</string>
@@ -57,5 +58,8 @@
 
     <string name="Confirm_password">Confirm password</string>
     <string name="communicate">Communicate</string>
+
+
+    <string name="front_text">Registration your car and save your time</string>
 
 </resources>
