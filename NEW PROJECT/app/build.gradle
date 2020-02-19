@@ -53,4 +53,6 @@ dependencies {
     // lib for SMS verification (Phone Auth)
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.3.0'
+    //volley
+    implementation 'com.android.volley:volley:1.1.1'
 }

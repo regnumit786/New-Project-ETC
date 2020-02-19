@@ -8,7 +8,7 @@
     android:background="@drawable/gradent">
 
     <androidx.cardview.widget.CardView
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
+            <!--<EditText
                 android:id="@+id/update_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
                 android:inputType="number"
                 android:maxLines="1"
                 android:padding="12dp"
-                android:singleLine="true" />
+                android:singleLine="true" />-->
 
             <EditText
                 android:id="@+id/update_name"
@@ -69,7 +69,7 @@
                 android:textSize="20sp"
                 android:layout_gravity="center_horizontal"
                 android:onClick="UpdateProfile"
-                android:text="Update"
+                android:text="@string/update"
                 android:textAllCaps="false" />
 
         </LinearLayout>

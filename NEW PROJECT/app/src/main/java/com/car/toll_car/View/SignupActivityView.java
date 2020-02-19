@@ -18,9 +18,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.car.toll_car.Model.Example;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.car.toll_car.Model.Retrofit.ApiClint;
-import com.car.toll_car.Model.Retrofit.RetrofitClint;
 import com.car.toll_car.R;
 import com.car.toll_car.ViewModel.LoginViewModel;
 
@@ -28,12 +32,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SignupActivityView extends AppCompatActivity {
     private LoginViewModel loginViewModel;
@@ -45,6 +46,7 @@ public class SignupActivityView extends AppCompatActivity {
     private SharedPreferences preferences;
     private long backPressTime;
     String number;
+    private String POST_URL="http://192.168.50.10/RFIDApicbank/registr.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,21 +67,20 @@ public class SignupActivityView extends AppCompatActivity {
         Validity();
         if (count>0){
             Toast.makeText(SignupActivityView.this, "All are OK", Toast.LENGTH_SHORT).show();
-            //SendOTP();
-            Intent intent= new Intent(SignupActivityView.this, OTP.class);
-            DataStore();
-            NotificationGenerate();
-            PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
-                    inputPassword.getText().toString(), inputNumber.getText().toString());
+            Intent intent= new Intent(SignupActivityView.this, Dashboard.class);
 
-            number= inputNumber.getText().toString().trim();
+            PostDataUsingVolley();
+            /*PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
+                    inputPassword.getText().toString(), inputNumber.getText().toString());*/
+
+            /**number= inputNumber.getText().toString().trim();
             if (number.isEmpty() || number.length() < 11) {
                 inputNumber.setError("Valid number is required");
                 inputNumber.requestFocus();
             }
             String phoneNumber= "+88" + number;
             intent.putExtra("phoneNumber",phoneNumber);
-            Log.e("Verification_Number",phoneNumber);
+            Log.e("Verification_Number",phoneNumber);*/
             startActivity(intent);
             setNullEditText();
         }
@@ -171,14 +172,16 @@ public class SignupActivityView extends AppCompatActivity {
         btnSignUp= findViewById(R.id.btn_signup);
     }
 
-    private void PostApi(final String name, final String email, final String password, final String mobile){
-
+    /**
+    private void PostApiUsingRetrofit(final String name, final String email, final String password, final String mobile){
         apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
-        Call<Example> call= apiClint.post(name, email, password, mobile);
+        String id= UUID.randomUUID().toString();
+
+        Call<SignUpPostModel> call= apiClint.post(id, name, email, password, mobile);
         Log.e("signing_test_name", name);
-        call.enqueue(new Callback<Example>() {
+        call.enqueue(new Callback<SignUpPostModel>() {
             @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
+            public void onResponse(Call<SignUpPostModel> call, Response<SignUpPostModel> response) {
                 if (response.isSuccessful()){
                     Log.e("request_code_match",String.valueOf(response.code()));
                     Toast.makeText(SignupActivityView.this, "Data Post successful", Toast.LENGTH_SHORT).show();
@@ -187,11 +190,12 @@ public class SignupActivityView extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Example> call, Throwable t) {
+            public void onFailure(Call<SignUpPostModel> call, Throwable t) {
                 Log.e("server_failed",t.getMessage());
             }
         });
     }
+     */
 
     private void setNullEditText(){
         inputName.setText("");
@@ -224,4 +228,47 @@ public class SignupActivityView extends AppCompatActivity {
         }
         backPressTime = System.currentTimeMillis();
     }
+
+    private void PostDataUsingVolley(){
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, POST_URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                SharedPreferences preferences = getSharedPreferences("Sign_up_DataStore", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("Sign_in_Mobile",inputNumber.getText().toString());
+                editor.apply();
+                editor.commit();
+                Toast.makeText(SignupActivityView.this, "Response successfully: "+response.length(), Toast.LENGTH_SHORT).show();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(SignupActivityView.this, "Error Response: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params= new HashMap<String, String>();
+                String name= inputName.getText().toString();
+                String email= inputEmail.getText().toString();
+                String password= inputPassword.getText().toString();
+                String number= inputNumber.getText().toString();
+
+                params.put("name",name);
+                params.put("email",email);
+                params.put("password",password);
+                params.put("mobile",number);
+
+                Log.e("VolleyName", name);
+                Log.e("VolleyEmail", email);
+                Log.e("VolleyPassword", password);
+                Log.e("VolleyNumber", number);
+
+                return params;
+            }
+        };
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
 }

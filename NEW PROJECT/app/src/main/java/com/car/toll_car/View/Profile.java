@@ -1,29 +1,52 @@
 package com.car.toll_car.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.car.toll_car.Model.Example;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.car.toll_car.Model.Retrofit.ApiClint;
 import com.car.toll_car.Model.Retrofit.RetrofitClint;
 import com.car.toll_car.R;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Profile extends AppCompatActivity {
 
     private TextView profileName, profileEmail, profilePhone, profileAccount;
-    ApiClint apiClint;
+    private RequestQueue mRequestQueue;
+    private ApiClint apiClint;
+    private EditText name, email;
+    private String mobile;
+    Button btnUpdate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +54,8 @@ public class Profile extends AppCompatActivity {
         setTitle("Profile");
 
         InitialView();
-        getSharepreferance();
+        mRequestQueue= Volley.newRequestQueue(this);
+        GetLoginData();
     }
 
     private void InitialView() {
@@ -56,43 +80,162 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    /*
+    /**
 
-    private void getPost(){
+    private void getPostUsingRetrofit(){
         apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
-        Call<List<Example>> call= apiClint.getPostData();
-        call.enqueue(new Callback<List<Example>>() {
+        Call<SignUpPostModel> call= apiClint.getPostData();
+        call.enqueue(new Callback<SignUpPostModel>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<SignUpPostModel> call, Response<SignUpPostModel> response) {
                 if (response.code() == 200){
                     Log.e("response_successfully",String.valueOf(response.code()));
-
-                    *//*List<Example> example= response.body();
-                    String nn= null, ee= null, pp= null;
-
-                    for (Example example1: example){
-                        nn= example1.getName();
-                        ee= example1.getEmail();
-                        pp= example1.getMobile();
-                    }
-                    profileName.setText(nn);
-                    profileEmail.setText(ee);
-                    profilePhone.setText(pp);*//*
-
                 } else {
                     Toast.makeText(Profile.this, "Server request failed", Toast.LENGTH_SHORT).show();
                 }
-
                 Log.e("Working_process_are_ok", String.valueOf(response.code()));
+                SignUpPostModel signUpPostModel= response.body();
+                profileName.setText(signUpPostModel.getName());
+                profileEmail.setText(signUpPostModel.getEmail());
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<SignUpPostModel> call, Throwable t) {
                 Log.e("Error_is:",t.getMessage());
             }
         });
     }
 
+     */
 
-    */
+    private void GetLoginData(){
+        String REQUEST_URL;
+        // log in sharepreference
+        SharedPreferences login_preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
+        final String login_mobile= login_preferences.getString("Login_Mobile","");
+
+        REQUEST_URL= "http://192.168.50.10/RFIDApicbank/updated.php?mobile="+login_mobile;
+        Log.e("LOGIN_REQUEST_MOBILE", login_mobile);
+
+
+        /*JsonObjectRequest objectRequest= new JsonObjectRequest(Request.Method.GET, REQUEST_URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        for (int i= 0; i<= response.length(); i++) {
+                            try {
+                                //JSONObject object= response.getJSONObject(i);
+                                profileName.setText(response.getString("name"));
+                                profileEmail.setText(response.getString("email"));
+                                profilePhone.setText(mobile);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error_Response",error.getMessage());
+            }
+        });*/
+
+
+        JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i= 0; i<= response.length(); i++) {
+                            try {
+                                JSONObject object= response.getJSONObject(i);
+                                profileName.setText(object.getString("name"));
+                                profileEmail.setText(object.getString("email"));
+                                profilePhone.setText(login_mobile);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ErrorResponse",error.getMessage());
+            }
+        });
+
+        mRequestQueue.add(jsonArrayRequest);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id= item.getItemId();
+        if (id== R.id.action_update){
+            DialogBuilder();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void DialogBuilder(){
+        final Dialog dialog= new Dialog(this);
+        dialog.setContentView(R.layout.updateitem);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        name= dialog.findViewById(R.id.update_name);
+        email= dialog.findViewById(R.id.update_email);
+        btnUpdate= dialog.findViewById(R.id.btn_update);
+
+        name.setText(profileName.getText().toString());
+        email.setText(profileEmail.getText().toString());
+        mobile= profilePhone.getText().toString();
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdatePost();
+                dialog.dismiss();
+            }
+        });
+        dialog.create();
+        dialog.show();
+    }
+
+    private void UpdatePost() {
+        String UPDATE_URL = "http://192.168.50.10/RFIDApicbank/updated.php";
+        StringRequest stringRequest= new StringRequest(Request.Method.POST, UPDATE_URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (response.equals("updatednull")) {
+                    Toast.makeText(Profile.this, "Update successfully: " + response, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Profile.this, "Update Error: "+response, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Profile.this, "ErrorResponse: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                String put_name = name.getText().toString().trim();
+                String put_email = email.getText().toString().trim();
+                String put_mobile = mobile;
+
+                params.put("mobile", put_mobile);
+                params.put("name", put_name);
+                params.put("email", put_email);
+
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 }

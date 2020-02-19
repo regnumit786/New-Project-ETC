@@ -30,6 +30,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="action_update">Update</string>
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -37,27 +39,28 @@
     <string name="menu_share">Share</string>
     <string name="log_out">log out</string>
     <string name="car_registration">Car Registration</string>
-    <string name="update">Update Name &amp; Email</string>
     <string name="profile">Profile</string>
 
 
     <string name="open">Open</string>
     <string name="close">Close</string>
 
-    <string name="name">Name</string>
+    <string name="name">Name : </string>
     <string name="email">Like: regnum786@gmail.com</string>
     <string name="mobile">01717722666</string>
     <string name="sign_in_number">Enter sign in mobile number</string>
 
-    <string name="Email">Email</string>
-    <string name="Phone">Phone</string>
-    <string name="account">Bank Account</string>
-    <string name="vehicle_num">vehicle Number</string>
-    <string name="vehicle_theses">Vehicle Theses</string>
+    <string name="Email">Email : </string>
+    <string name="Phone">Phone : </string>
+    <string name="account">Bank Account : </string>
+    <string name="vehicle_num">Vehicle Number : </string>
+    <string name="vehicle_theses">Vehicle Theses : </string>
     <string name="sign_up">Sign Up</string>
 
     <string name="Confirm_password">Confirm password</string>
     <string name="communicate">Communicate</string>
+
+    <string name="update">UPDATE</string>
 
 
     <string name="front_text">Registration your car and save your time</string>

@@ -11,10 +11,6 @@
             android:title="@string/profile" />
 
         <item
-            android:id="@+id/update"
-            android:icon="@drawable/ic_update"
-            android:title="@string/update" />
-        <item
             android:id="@+id/ocr_activity"
             android:icon="@drawable/car"
             android:title="@string/car_registration" />
