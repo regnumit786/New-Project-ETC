@@ -47,6 +47,8 @@ public class Profile extends AppCompatActivity {
     private EditText name, email;
     private String mobile;
     Button btnUpdate;
+    private String REQUEST_URL;
+    private String login_mobile, sign_up_mobile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class Profile extends AppCompatActivity {
 
         InitialView();
         mRequestQueue= Volley.newRequestQueue(this);
-        GetLoginData();
+        GetAllData();
     }
 
     private void InitialView() {
@@ -80,7 +82,7 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    /**
+    /*
 
     private void getPostUsingRetrofit(){
         apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
@@ -106,17 +108,63 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-     */
+    */
+
+    private void GetAllData(){
+        /**
+         * get log in data
+         */
+        SharedPreferences login_preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
+        login_mobile= login_preferences.getString("Login_Mobile","");
+        int value= login_preferences.getInt("Check_login_value",0);
+        ///log
+        Log.e("LOGIN_REQUEST_MOBILE", login_mobile);
+        /**
+         * get sign up data
+         */
+        SharedPreferences sign_up_preferences = getSharedPreferences("Sign_up_DatabaseStore", Context.MODE_PRIVATE);
+        sign_up_mobile= sign_up_preferences.getString("Sign_in_Mobile","");
+        ///log
+        Log.e("SIGN_UP_REQUEST_MOBILE", sign_up_mobile);
+        if (value == 1){
+            Log.e("Execute_login_blocks", login_mobile);
+            GetLoginData();
+        } else{
+            Log.e("Execute_Sign_up_blocks", sign_up_mobile);
+            GetSignUpData();
+        }
+    }
+
+    private void GetSignUpData(){
+
+        REQUEST_URL= "http://192.168.50.10/RFIDApicbank/updated.php?mobile="+sign_up_mobile;
+
+        JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for (int i= 0; i<= response.length(); i++) {
+                            try {
+                                JSONObject object= response.getJSONObject(i);
+                                profileName.setText(object.getString("name"));
+                                profileEmail.setText(object.getString("email"));
+                                profilePhone.setText(sign_up_mobile);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ErrorResponse",error.getMessage());
+            }
+        });
+
+        mRequestQueue.add(jsonArrayRequest);
+    }
 
     private void GetLoginData(){
-        String REQUEST_URL;
-        // log in sharepreference
-        SharedPreferences login_preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
-        final String login_mobile= login_preferences.getString("Login_Mobile","");
-
-        REQUEST_URL= "http://192.168.50.10/RFIDApicbank/updated.php?mobile="+login_mobile;
-        Log.e("LOGIN_REQUEST_MOBILE", login_mobile);
-
 
         /*JsonObjectRequest objectRequest= new JsonObjectRequest(Request.Method.GET, REQUEST_URL, null,
                 new Response.Listener<JSONObject>() {
@@ -140,30 +188,34 @@ public class Profile extends AppCompatActivity {
             }
         });*/
 
+        try {
+            REQUEST_URL= "http://192.168.50.10/RFIDApicbank/updated.php?mobile="+login_mobile;
 
-        JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i= 0; i<= response.length(); i++) {
-                            try {
-                                JSONObject object= response.getJSONObject(i);
-                                profileName.setText(object.getString("name"));
-                                profileEmail.setText(object.getString("email"));
-                                profilePhone.setText(login_mobile);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+            JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            for (int i= 0; i<= response.length(); i++) {
+                                try {
+                                    JSONObject object= response.getJSONObject(i);
+                                    profileName.setText(object.getString("name"));
+                                    profileEmail.setText(object.getString("email"));
+                                    profilePhone.setText(login_mobile);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("ErrorResponse",error.getMessage());
-            }
-        });
-
-        mRequestQueue.add(jsonArrayRequest);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("ErrorResponse","error.getMessage()");
+                }
+            });
+            mRequestQueue.add(jsonArrayRequest);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

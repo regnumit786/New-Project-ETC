@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".View.Profile"
+        <activity android:name=".View.SignupActivityView"
             android:parentActivityName=".View.Dashboard"/>
 
         <receiver
@@ -31,12 +31,12 @@
 
         <activity android:name=".View.OTP" />
 
-        <activity android:name=".View.SignupActivityView" />
+        <activity android:name=".View.LoginActivityView" />
 
         <activity android:name=".View.OCRActivityView"
             android:parentActivityName=".View.Dashboard"/>
 
-        <activity android:name=".View.LoginActivityView">
+        <activity android:name=".View.Profile">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

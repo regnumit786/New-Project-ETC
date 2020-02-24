@@ -113,7 +113,7 @@ public class LoginActivityView extends AppCompatActivity {
         });
     }
 
-     */
+    */
 
     public void InitialView(){
         mobileText= findViewById(R.id.login_mobile);
@@ -134,53 +134,54 @@ public class LoginActivityView extends AppCompatActivity {
     }
 
     private void PostLoginUsingVolley(){
+        try {
+            StringRequest stringRequest= new StringRequest(Request.Method.POST, POST_URL, new
+                    com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.equals("success")) {
+                                /**
+                                 * mobile number store sharedpreferences for query profile url
+                                 */
+                                SharedPreferences preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("Login_Mobile",mobileText.getText().toString());
+                                editor.putInt("Check_login_value",1);
+                                editor.apply();
+                                editor.commit();
 
-        StringRequest stringRequest= new StringRequest(Request.Method.POST, POST_URL, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (response.equals("success")) {
-                    /**
-                     * mobile number store sharedpreferences for query profile url
-                     */
-                    SharedPreferences preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("Login_Mobile",mobileText.getText().toString());
-                    editor.putInt("Check_value",1);
-                    editor.apply();
-                    editor.commit();
-
-                    Intent intent= new Intent(LoginActivityView.this, Dashboard.class);
-                    Log.e("Login_mobile",mobileText.getText().toString().trim());
-                    startActivity(intent);
-                    Toast.makeText(LoginActivityView.this, "Login successfully: " + response, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LoginActivityView.this, "Login Error: "+response, Toast.LENGTH_SHORT).show();
+                                Intent intent= new Intent(LoginActivityView.this, Dashboard.class);
+                                Log.e("Login_mobile",mobileText.getText().toString().trim());
+                                startActivity(intent);
+                                Toast.makeText(LoginActivityView.this, "Login successfully: " + response, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivityView.this, "Login Error: "+response, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(LoginActivityView.this, "Server Failed: "+error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivityView.this, "ErrorResponse: "+error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params= new HashMap<String, String>();
-                String number= mobileText.getText().toString();
-                String password= passwordText.getText().toString();
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params= new HashMap<String, String>();
+                    String number= mobileText.getText().toString();
+                    String password= passwordText.getText().toString();
 
-                params.put("mobile",number);
-                params.put("password",password);
+                    params.put("mobile",number);
+                    params.put("password",password);
+                    Log.e("VolleyNumber", number);
+                    Log.e("VolleyPassword", password);
 
-                Log.e("VolleyNumber", number);
-                Log.e("VolleyPassword", password);
-
-                return params;
-            }
-        };
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue= Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
-
-
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Toll_Car</string>
+    <string name="app_name">ETC Toll Plaza</string>
     <string name="title_activity_login_view">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -20,6 +20,9 @@
 
     <string name="user_mobile">Mobile</string>
     <string name="password">Password</string>
+
+    <string name="hintmoble">01717722666</string>
+
     <string name="login">Login</string>
     <string name="already">i have no account? <font color='red'>Sign up</font></string>
     <string name="title_activity_profile">Profile</string>
@@ -61,6 +64,16 @@
     <string name="communicate">Communicate</string>
 
     <string name="update">UPDATE</string>
+
+
+    <string name="profileN">Regnum IT</string>
+    <string name="profileE">regnumit786@gmail.com</string>
+    <string name="profileP">01717722666</string>
+    <string name="profileBN">0625147896547</string>
+    <string name="profileVN">DHA-matro-ch50</string>
+    <string name="profileVT">13548312</string>
+
+    <string name="regnumTitle">Regnum IT Lmt.</string>
 
 
     <string name="front_text">Registration your car and save your time</string>

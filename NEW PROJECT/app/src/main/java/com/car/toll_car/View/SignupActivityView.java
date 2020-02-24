@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -53,7 +54,7 @@ public class SignupActivityView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupview);
 
-        setTitle("ETC Toll Plaza");
+        setTitle("Registration");
 
         InitialView();
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
@@ -66,9 +67,6 @@ public class SignupActivityView extends AppCompatActivity {
     public void SignUpBtn(View view) {
         Validity();
         if (count>0){
-            Toast.makeText(SignupActivityView.this, "All are OK", Toast.LENGTH_SHORT).show();
-            Intent intent= new Intent(SignupActivityView.this, Dashboard.class);
-
             PostDataUsingVolley();
             /*PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
                     inputPassword.getText().toString(), inputNumber.getText().toString());*/
@@ -81,7 +79,6 @@ public class SignupActivityView extends AppCompatActivity {
             String phoneNumber= "+88" + number;
             intent.putExtra("phoneNumber",phoneNumber);
             Log.e("Verification_Number",phoneNumber);*/
-            startActivity(intent);
             setNullEditText();
         }
     }
@@ -172,7 +169,8 @@ public class SignupActivityView extends AppCompatActivity {
         btnSignUp= findViewById(R.id.btn_signup);
     }
 
-    /**
+    /*
+
     private void PostApiUsingRetrofit(final String name, final String email, final String password, final String mobile){
         apiClint= RetrofitClint.getRetrofitClint().create(ApiClint.class);
         String id= UUID.randomUUID().toString();
@@ -195,7 +193,8 @@ public class SignupActivityView extends AppCompatActivity {
             }
         });
     }
-     */
+
+    */
 
     private void setNullEditText(){
         inputName.setText("");
@@ -229,46 +228,58 @@ public class SignupActivityView extends AppCompatActivity {
         backPressTime = System.currentTimeMillis();
     }
 
-    private void PostDataUsingVolley(){
-        StringRequest stringRequest= new StringRequest(Request.Method.POST, POST_URL, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                SharedPreferences preferences = getSharedPreferences("Sign_up_DataStore", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("Sign_in_Mobile",inputNumber.getText().toString());
-                editor.apply();
-                editor.commit();
-                Toast.makeText(SignupActivityView.this, "Response successfully: "+response.length(), Toast.LENGTH_SHORT).show();
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(SignupActivityView.this, "Error Response: "+error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params= new HashMap<String, String>();
-                String name= inputName.getText().toString();
-                String email= inputEmail.getText().toString();
-                String password= inputPassword.getText().toString();
-                String number= inputNumber.getText().toString();
+    private void PostDataUsingVolley() {
+        try {
+            StringRequest stringRequest= new StringRequest(Request.Method.POST, POST_URL, new com.android.volley.Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    if (response.equals("Success")) {
+                        SharedPreferences preferences = getSharedPreferences("Sign_up_DatabaseStore", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("Sign_in_Mobile", inputNumber.getText().toString());
+                        editor.apply();
+                        editor.commit();
+                        Log.e("Response_success",response);
+                        Toast.makeText(SignupActivityView.this, "Response successfully: " + response.length(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SignupActivityView.this, Dashboard.class));
+                    } else {
+                        Toast.makeText(SignupActivityView.this, "Sign Up Failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }, new com.android.volley.Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("Server Failed","error.getMessage()");
+                    Toast.makeText(SignupActivityView.this, "Server Failed: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params= new HashMap<String, String>();
+                    String name= inputName.getText().toString();
+                    String email= inputEmail.getText().toString();
+                    String password= inputPassword.getText().toString();
+                    String number= inputNumber.getText().toString();
 
-                params.put("name",name);
-                params.put("email",email);
-                params.put("password",password);
-                params.put("mobile",number);
+                    params.put("name",name);
+                    params.put("email",email);
+                    params.put("password",password);
+                    params.put("mobile",number);
 
-                Log.e("VolleyName", name);
-                Log.e("VolleyEmail", email);
-                Log.e("VolleyPassword", password);
-                Log.e("VolleyNumber", number);
+                    Log.e("VolleyName", name);
+                    Log.e("VolleyEmail", email);
+                    Log.e("VolleyPassword", password);
+                    Log.e("VolleyNumber", number);
 
-                return params;
-            }
-        };
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue= Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
