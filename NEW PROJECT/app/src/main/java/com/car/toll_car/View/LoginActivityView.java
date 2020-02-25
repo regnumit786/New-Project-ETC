@@ -44,7 +44,7 @@ public class LoginActivityView extends AppCompatActivity {
     private int count=0;
     private long backPressTime;
     private ApiClint apiClint;
-    private String POST_URL= "http://192.168.50.10/RFIDApicbank/login.php";
+    private String POST_URL= "http://103.197.206.139/RFIDApicbank/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

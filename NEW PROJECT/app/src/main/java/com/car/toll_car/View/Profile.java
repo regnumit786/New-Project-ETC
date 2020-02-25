@@ -29,6 +29,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.car.toll_car.Model.Retrofit.ApiClint;
 import com.car.toll_car.Model.Retrofit.RetrofitClint;
+import com.car.toll_car.Model.SignUpPostModel;
 import com.car.toll_car.R;
 import com.google.android.gms.dynamic.IFragmentWrapper;
 
@@ -38,6 +39,9 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class Profile extends AppCompatActivity {
 
@@ -110,6 +114,7 @@ public class Profile extends AppCompatActivity {
 
     */
 
+
     private void GetAllData(){
         /**
          * get log in data
@@ -137,7 +142,7 @@ public class Profile extends AppCompatActivity {
 
     private void GetSignUpData(){
 
-        REQUEST_URL= "http://192.168.50.10/RFIDApicbank/updated.php?mobile="+sign_up_mobile;
+        REQUEST_URL= "http://103.197.206.139/RFIDApicbank/updated.php?mobile="+sign_up_mobile;
 
         JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
                 new Response.Listener<JSONArray>() {
@@ -189,7 +194,7 @@ public class Profile extends AppCompatActivity {
         });*/
 
         try {
-            REQUEST_URL= "http://192.168.50.10/RFIDApicbank/updated.php?mobile="+login_mobile;
+            REQUEST_URL= "http://103.197.206.139/RFIDApicbank/updated.php?mobile="+login_mobile;
 
             JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
                     new Response.Listener<JSONArray>() {
@@ -257,7 +262,7 @@ public class Profile extends AppCompatActivity {
     }
 
     private void UpdatePost() {
-        String UPDATE_URL = "http://192.168.50.10/RFIDApicbank/updated.php";
+        String UPDATE_URL = "http://103.197.206.139/RFIDApicbank/updated.php";
         StringRequest stringRequest= new StringRequest(Request.Method.POST, UPDATE_URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

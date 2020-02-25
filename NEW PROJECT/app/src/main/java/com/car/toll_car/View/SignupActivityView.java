@@ -47,7 +47,7 @@ public class SignupActivityView extends AppCompatActivity {
     private SharedPreferences preferences;
     private long backPressTime;
     String number;
-    private String POST_URL="http://192.168.50.10/RFIDApicbank/registr.php";
+    private String POST_URL="http://103.197.206.139/RFIDApicbank/registr.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
