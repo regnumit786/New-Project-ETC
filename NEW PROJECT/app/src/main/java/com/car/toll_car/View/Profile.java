@@ -114,7 +114,6 @@ public class Profile extends AppCompatActivity {
 
     */
 
-
     private void GetAllData(){
         /**
          * get log in data
@@ -142,7 +141,7 @@ public class Profile extends AppCompatActivity {
 
     private void GetSignUpData(){
 
-        REQUEST_URL= "http://103.197.206.139/RFIDApicbank/updated.php?mobile="+sign_up_mobile;
+        REQUEST_URL= "http://192.168.50.17/RFIDApicbank/updated.php?mobile="+sign_up_mobile;
 
         JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
                 new Response.Listener<JSONArray>() {
@@ -194,7 +193,7 @@ public class Profile extends AppCompatActivity {
         });*/
 
         try {
-            REQUEST_URL= "http://103.197.206.139/RFIDApicbank/updated.php?mobile="+login_mobile;
+            REQUEST_URL= "http://192.168.50.17/RFIDApicbank/updated.php?mobile="+login_mobile;
 
             JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.GET, REQUEST_URL, null,
                     new Response.Listener<JSONArray>() {
@@ -262,11 +261,12 @@ public class Profile extends AppCompatActivity {
     }
 
     private void UpdatePost() {
-        String UPDATE_URL = "http://103.197.206.139/RFIDApicbank/updated.php";
+        String UPDATE_URL = "http://192.168.50.17/RFIDApicbank/updated.php";
         StringRequest stringRequest= new StringRequest(Request.Method.POST, UPDATE_URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("updatednull")) {
+                String matchUpdate= "Success";
+                if (response.equals("Success")) {
                     Toast.makeText(Profile.this, "Update successfully: " + response, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(Profile.this, "Update Error: "+response, Toast.LENGTH_SHORT).show();
