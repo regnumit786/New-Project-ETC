@@ -48,7 +48,7 @@ public class Profile extends AppCompatActivity {
     private TextView profileName, profileEmail, profilePhone, profileAccount;
     private RequestQueue mRequestQueue;
     private ApiClint apiClint;
-    private EditText name, email;
+    private EditText edName, edEmail, edMobile;
     private String mobile;
     Button btnUpdate;
     private String REQUEST_URL;
@@ -123,6 +123,7 @@ public class Profile extends AppCompatActivity {
         int value= login_preferences.getInt("Check_login_value",0);
         ///log
         Log.e("LOGIN_REQUEST_MOBILE", login_mobile);
+        Log.e("LOGIN_REQUEST_VALUE", String.valueOf(value));
         /**
          * get sign up data
          */
@@ -213,7 +214,7 @@ public class Profile extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("ErrorResponse","error.getMessage()");
+                    Log.e("ErrorResponse",error.getMessage());
                 }
             });
             mRequestQueue.add(jsonArrayRequest);
@@ -241,17 +242,20 @@ public class Profile extends AppCompatActivity {
         final Dialog dialog= new Dialog(this);
         dialog.setContentView(R.layout.updateitem);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        name= dialog.findViewById(R.id.update_name);
-        email= dialog.findViewById(R.id.update_email);
+        edName= dialog.findViewById(R.id.update_name);
+        edEmail= dialog.findViewById(R.id.update_email);
+        edMobile= dialog.findViewById(R.id.update_number);
         btnUpdate= dialog.findViewById(R.id.btn_update);
 
-        name.setText(profileName.getText().toString());
-        email.setText(profileEmail.getText().toString());
+        edName.setText(profileName.getText().toString());
+        edEmail.setText(profileEmail.getText().toString());
         mobile= profilePhone.getText().toString();
+        edMobile.setText(profilePhone.getText().toString());
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 UpdatePost();
                 dialog.dismiss();
             }
@@ -265,10 +269,11 @@ public class Profile extends AppCompatActivity {
         StringRequest stringRequest= new StringRequest(Request.Method.POST, UPDATE_URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String matchUpdate= "Success";
-                if (response.equals("Success")) {
+                if (response.equals("succesfully")) {
+                    GetLoginData();
                     Toast.makeText(Profile.this, "Update successfully: " + response, Toast.LENGTH_SHORT).show();
                 } else {
+                    GetLoginData();
                     Toast.makeText(Profile.this, "Update Error: "+response, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -281,9 +286,9 @@ public class Profile extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                String put_name = name.getText().toString().trim();
-                String put_email = email.getText().toString().trim();
-                String put_mobile = mobile;
+                String put_name = edName.getText().toString().trim();
+                String put_email = edEmail.getText().toString().trim();
+                String put_mobile = edMobile.getText().toString();
 
                 params.put("mobile", put_mobile);
                 params.put("name", put_name);

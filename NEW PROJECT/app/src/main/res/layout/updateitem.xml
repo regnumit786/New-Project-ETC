@@ -20,19 +20,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--<EditText
+            <EditText
                 android:id="@+id/update_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:drawableLeft="@drawable/ic_local_phone"
                 android:drawablePadding="16dp"
-                android:hint="@string/sign_in_number"
+                android:hint="@string/update_mobile"
                 android:maxLength="11"
                 android:inputType="number"
                 android:maxLines="1"
                 android:padding="12dp"
-                android:singleLine="true" />-->
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/update_name"

@@ -42,8 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="16sp"
-            android:paddingEnd="16sp"
+            android:paddingStart="26sp"
+            android:paddingEnd="26sp"
             android:paddingTop="8sp">
 
             <EditText
@@ -139,7 +139,6 @@
                 android:textAllCaps="false" />
 
         </LinearLayout>
-
 
     </ScrollView>
 

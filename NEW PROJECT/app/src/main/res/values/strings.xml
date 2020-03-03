@@ -49,8 +49,9 @@
     <string name="close">Close</string>
 
     <string name="name">Name : </string>
-    <string name="email">Like: regnum786@gmail.com</string>
+    <string name="email">regnum786@gmail.com</string>
     <string name="mobile">01717722666</string>
+    <string name="update_mobile">1717722666</string>
     <string name="sign_in_number">Enter sign in mobile number</string>
 
     <string name="Email">Email : </string>
