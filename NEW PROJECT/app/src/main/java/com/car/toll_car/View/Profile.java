@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.car.toll_car.Model.Retrofit.ApiClint;
@@ -39,6 +37,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,7 +46,6 @@ public class Profile extends AppCompatActivity {
 
     private TextView profileName, profileEmail, profilePhone, profileAccount;
     private RequestQueue mRequestQueue;
-    private ApiClint apiClint;
     private EditText edName, edEmail, edMobile;
     private String mobile;
     Button btnUpdate;
@@ -118,7 +116,7 @@ public class Profile extends AppCompatActivity {
         /**
          * get log in data
          */
-        SharedPreferences login_preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
+        SharedPreferences login_preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
         login_mobile= login_preferences.getString("Login_Mobile","");
         int value= login_preferences.getInt("Check_login_value",0);
         ///log
@@ -127,14 +125,16 @@ public class Profile extends AppCompatActivity {
         /**
          * get sign up data
          */
-        SharedPreferences sign_up_preferences = getSharedPreferences("Sign_up_DatabaseStore", Context.MODE_PRIVATE);
-        sign_up_mobile= sign_up_preferences.getString("Sign_in_Mobile","");
+        SharedPreferences sign_up_preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
+        sign_up_mobile= sign_up_preferences.getString("Sign_up_Mobile","");
+        int s_value= sign_up_preferences.getInt("Check_signup_value",0);
         ///log
         Log.e("SIGN_UP_REQUEST_MOBILE", sign_up_mobile);
+        Log.e("SIGN_UP_REQUEST_VALUE", String.valueOf(s_value));
         if (value == 1){
             Log.e("Execute_login_blocks", login_mobile);
             GetLoginData();
-        } else{
+        } if (s_value == 2){
             Log.e("Execute_Sign_up_blocks", sign_up_mobile);
             GetSignUpData();
         }

@@ -9,8 +9,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -68,6 +70,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             intent.setType("text/plain");
             startActivity(Intent.createChooser(intent,"Share With"));
         } else if (id== R.id.nav_log_out){
+            SharedPreferences preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
+            preferences.edit().clear().commit();
             startActivity(new Intent(this, LoginActivityView.class));
         }
         drawer.closeDrawer(GravityCompat.START);

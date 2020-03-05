@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.car.toll_car.Model.LocalDB.SQLiteHelper;
 import com.car.toll_car.Model.Retrofit.ApiClint;
 import com.car.toll_car.R;
 import com.car.toll_car.ViewModel.LoginViewModel;
@@ -33,7 +35,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -42,43 +43,76 @@ public class SignupActivityView extends AppCompatActivity {
     private Button btnSignUp;
     private EditText inputName, inputNumber, inputEmail, inputPassword, inputRePassword;
     private ApiClint apiClint;
-    private int count=0;
+    private int count = 0;
     int randomOTPnumber;
     private SharedPreferences preferences;
     private long backPressTime;
-    String number;
-    private String POST_URL="http://192.168.50.17/RFIDApicbank/registr.php";
+    String name, email, password, number;
+
+    private String POST_URL = "http://192.168.50.17/RFIDApicbank/registr.php";
+    RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signupview);
-
         setTitle("Registration");
 
         InitialView();
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
-        //PostApi();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
     }
 
+    private void InitialView() {
+        inputName = findViewById(R.id.input_name);
+        inputNumber = findViewById(R.id.input_number);
+        inputEmail = findViewById(R.id.input_email);
+        inputPassword = findViewById(R.id.input_password);
+        inputRePassword = findViewById(R.id.input_re_password);
+        btnSignUp = findViewById(R.id.btn_signup);
+    }
+
+    private void SetTextData() {
+        name = inputName.getText().toString();
+        email = inputEmail.getText().toString();
+        password = inputPassword.getText().toString();
+        number = inputNumber.getText().toString();
+    }
+
+    private void LocalDatabase() {
+        SQLiteHelper helper = new SQLiteHelper(this);
+        helper.AddUser(inputNumber.getText().toString().trim(), inputPassword.getText().toString());
+        helper.close();
+    }
+
     public void SignUpBtn(View view) {
         Validity();
-        if (count>0){
+        SetTextData();
+        if (count > 0) {
             PostDataUsingVolley();
+            Log.e("TAG count", String.valueOf(count));
+
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("Sign_up_Mobile", inputNumber.getText().toString().trim());
+            editor.putInt("Check_signup_value",2);
+            editor.apply();
+            editor.commit();
+
+
             /*PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
                     inputPassword.getText().toString(), inputNumber.getText().toString());*/
 
             /**number= inputNumber.getText().toString().trim();
-            if (number.isEmpty() || number.length() < 11) {
-                inputNumber.setError("Valid number is required");
-                inputNumber.requestFocus();
-            }
-            String phoneNumber= "+88" + number;
-            intent.putExtra("phoneNumber",phoneNumber);
-            Log.e("Verification_Number",phoneNumber);*/
+             if (number.isEmpty() || number.length() < 11) {
+             inputNumber.setError("Valid number is required");
+             inputNumber.requestFocus();
+             }
+             String phoneNumber= "+88" + number;
+             intent.putExtra("phoneNumber",phoneNumber);
+             Log.e("Verification_Number",phoneNumber);*/
             setNullEditText();
         }
     }
@@ -87,7 +121,7 @@ public class SignupActivityView extends AppCompatActivity {
         Intent intent = new Intent(this, SignupActivityView.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Regnum Toll OTP")
@@ -107,13 +141,13 @@ public class SignupActivityView extends AppCompatActivity {
     private void SendOTP() {
 
         try {
-            String phonenumber= "0088"+inputNumber.getText().toString();
-            Random random= new Random();
-            randomOTPnumber= random.nextInt(999999);
+            String phonenumber = "0088" + inputNumber.getText().toString();
+            Random random = new Random();
+            randomOTPnumber = random.nextInt(999999);
             // Construct data
-            String key="s7uxL5lA+Vo-rHXE3P7p3edDGVJz1RvlZnCto3ZrwJ";
-            String apiKey = "apikey=" +key;
-            String message = "&message=" + "Your OTP is: "+randomOTPnumber;
+            String key = "s7uxL5lA+Vo-rHXE3P7p3edDGVJz1RvlZnCto3ZrwJ";
+            String apiKey = "apikey=" + key;
+            String message = "&message=" + "Your OTP is: " + randomOTPnumber;
             String sender = "&sender=" + "Regnum Toll Plaza";
             String numbers = "&numbers=" + phonenumber;
 
@@ -135,38 +169,29 @@ public class SignupActivityView extends AppCompatActivity {
             //return stringBuffer.toString();
         } catch (Exception e) {
             //Log.d("Error SMS:",e.getMessage());
-            Toast.makeText(this, "Error send OTP"+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error send OTP" + e.getMessage(), Toast.LENGTH_SHORT).show();
             //System.out.println("Error SMS "+e);
             //return "Error "+e;
         }
     }
 
-    private void Validity (){
+    private void Validity() {
 
-        int checkValid= loginViewModel.CheckValidity(inputName.getText().toString(), inputNumber.getText().toString(),
+        int checkValid = loginViewModel.CheckValidity(inputName.getText().toString(), inputNumber.getText().toString(),
                 inputEmail.getText().toString(), inputPassword.getText().toString(), inputRePassword.getText().toString());
-        Log.d("checkValid",String.valueOf(checkValid));
+        Log.d("checkValid", String.valueOf(checkValid));
 
-        if (checkValid == 1){
+        if (checkValid == 1) {
             inputName.setError("Must enter name");
-        } else if (checkValid == 2){
+        } else if (checkValid == 2) {
             inputNumber.setError("Must enter mobile");
-        } else if (checkValid == 3){
+        } else if (checkValid == 3) {
             inputPassword.setError("Password at least 6 char long");
-        } else if (checkValid == 4){
+        } else if (checkValid == 4) {
             inputRePassword.setError("password must similar");
-        } else if (checkValid == 6){
+        } else if (checkValid == 6) {
             count++;
         }
-    }
-
-    private void InitialView() {
-        inputName= findViewById(R.id.input_name);
-        inputNumber= findViewById(R.id.input_number);
-        inputEmail= findViewById(R.id.input_email);
-        inputPassword= findViewById(R.id.input_password);
-        inputRePassword= findViewById(R.id.input_re_password);
-        btnSignUp= findViewById(R.id.btn_signup);
     }
 
     /*
@@ -196,7 +221,7 @@ public class SignupActivityView extends AppCompatActivity {
 
     */
 
-    private void setNullEditText(){
+    private void setNullEditText() {
         inputName.setText("");
         inputNumber.setText("");
         inputEmail.setText("");
@@ -204,14 +229,14 @@ public class SignupActivityView extends AppCompatActivity {
         inputRePassword.setText("");
     }
 
-    private void DataStore(){
+    private void DataStore() {
         preferences = getSharedPreferences("LogedDataStore", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("LogedName",inputName.getText().toString());
-        editor.putString("LogedEmail",inputEmail.getText().toString());
-        editor.putString("LogedMobile",inputNumber.getText().toString());
-        editor.putString("LogedPassword",inputPassword.getText().toString());
-        editor.putString("LogedrePassword",inputRePassword.getText().toString());
+        editor.putString("LogedName", inputName.getText().toString());
+        editor.putString("LogedEmail", inputEmail.getText().toString());
+        editor.putString("LogedMobile", inputNumber.getText().toString());
+        editor.putString("LogedPassword", inputPassword.getText().toString());
+        editor.putString("LogedrePassword", inputRePassword.getText().toString());
         editor.putInt("OTP_PIN", randomOTPnumber);
         editor.apply();
         editor.commit();
@@ -230,41 +255,29 @@ public class SignupActivityView extends AppCompatActivity {
 
     private void PostDataUsingVolley() {
         try {
-            StringRequest stringRequest= new StringRequest(Request.Method.POST, POST_URL, new com.android.volley.Response.Listener<String>() {
+            requestQueue = Volley.newRequestQueue(this);
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, POST_URL, new com.android.volley.Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    if (response.equals("Success")) {
-                        SharedPreferences preferences = getSharedPreferences("Sign_up_DatabaseStore", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString("Sign_in_Mobile", inputNumber.getText().toString());
-                        editor.apply();
-                        editor.commit();
-                        Log.e("Response_success",response);
-                        Toast.makeText(SignupActivityView.this, "Response successfully: " + response.length(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SignupActivityView.this, Dashboard.class));
-                    } else {
-                        Toast.makeText(SignupActivityView.this, "Sign Up Failed", Toast.LENGTH_SHORT).show();
-                    }
+                    Log.e("Response_success", response);
+                    Toast.makeText(SignupActivityView.this, "Successfully sign up", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignupActivityView.this, Dashboard.class));
                 }
             }, new com.android.volley.Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e("Server Failed","error.getMessage()");
-                    Toast.makeText(SignupActivityView.this, "Server Failed: "+error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("Server Failed: ", String.valueOf(error.getMessage()));
+                    Toast.makeText(SignupActivityView.this, "Server Failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }){
+            }) {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params= new HashMap<String, String>();
-                    String name= inputName.getText().toString();
-                    String email= inputEmail.getText().toString();
-                    String password= inputPassword.getText().toString();
-                    String number= inputNumber.getText().toString();
+                    Map<String, String> params = new HashMap<String, String>();
 
-                    params.put("name",name);
-                    params.put("email",email);
-                    params.put("password",password);
-                    params.put("mobile",number);
+                    params.put("name", name);
+                    params.put("email", email);
+                    params.put("password", password);
+                    params.put("mobile", number);
 
                     Log.e("VolleyName", name);
                     Log.e("VolleyEmail", email);
@@ -274,7 +287,7 @@ public class SignupActivityView extends AppCompatActivity {
                     return params;
                 }
             };
-            RequestQueue requestQueue= Volley.newRequestQueue(this);
+
             requestQueue.add(stringRequest);
 
         } catch (Exception e) {

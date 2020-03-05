@@ -17,18 +17,17 @@ public class LoginViewModel extends AndroidViewModel {
 
     }
 
-    public int CheckValidity(String name, String mobile, String email, String password,
-                             String rePassword){
+    public int CheckValidity(String name, String mobile, String email, String password, String rePassword){
 
-        signUpModel= new SignUpModel(name, mobile, email, password, rePassword);
+        //signUpModel= new SignUpModel(name, mobile, email, password, rePassword);
 
-        if (TextUtils.isEmpty(signUpModel.getName())){
+        if (TextUtils.isEmpty(name)){
             return 1;
-        } else if (TextUtils.isEmpty(signUpModel.getMobile())){
+        } else if (TextUtils.isEmpty(mobile)){
             return 2;
-        } else if (signUpModel.getPassword().length()<6){
+        } else if (password.length()<6){
             return 3;
-        } else if (!signUpModel.getPassword().equals(signUpModel.getRePassword())){
+        } else if (!password.equals(rePassword)){
             return 4;
         }
         return 6;

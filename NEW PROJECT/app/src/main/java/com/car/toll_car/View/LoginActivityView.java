@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +21,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.car.toll_car.Model.LocalDB.SQLiteHelper;
 import com.car.toll_car.Model.Retrofit.ApiClint;
 import com.car.toll_car.Model.Retrofit.LoginResponse;
 import com.car.toll_car.Model.Retrofit.RetrofitClint;
+import com.car.toll_car.Model.SharepreferanceConfig;
 import com.car.toll_car.R;
 import com.car.toll_car.ViewModel.LoginViewModel;
 
@@ -188,6 +191,22 @@ public class LoginActivityView extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        /*SQLiteHelper helper= new SQLiteHelper(this);
+        Cursor cursor= helper.DisplayData();
+        if (cursor.getCount()!=0){
+            Log.e("CoursorData",String.valueOf(cursor.getCount()));
+            startActivity(new Intent(this,Dashboard.class));
+            finish();
+        }else {
+            Toast.makeText(this, "Your login data is empty", Toast.LENGTH_SHORT).show();
+        }*/
 
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
+        int value= preferences.getInt("Check_login_value",0);
+        if (value==1){
+            startActivity(new Intent(this, Dashboard.class));
+        }else {
+            Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -75,8 +75,16 @@
     <string name="profileVT">13548312</string>
 
     <string name="regnumTitle">Regnum IT Ltd.</string>
-
-
+    
     <string name="front_text">Registration your car and save your time</string>
 
+    <string name="login_share_prefarance">ETCTollPlazaLogin_share_prefarance</string>
+    <string name="login_status_share_prefarance">ETCTollPlazaLogin_status_share_prefarance</string>
+
+    <!--sharepreference data-->
+
+    <string name="signupStore">Signup_UsreDataStore</string>
+    <string name="loginStore">Login_UsreDataStore</string>
+
+    
 </resources>
