@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class SignupActivityView extends AppCompatActivity {
+    private static final int SIGN_UP_STATE=2;
     private LoginViewModel loginViewModel;
     private Button btnSignUp;
     private EditText inputName, inputNumber, inputEmail, inputPassword, inputRePassword;
@@ -97,7 +98,7 @@ public class SignupActivityView extends AppCompatActivity {
             SharedPreferences preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("Sign_up_Mobile", inputNumber.getText().toString().trim());
-            editor.putInt("Check_signup_value",2);
+            editor.putInt("Check_signup_value", SIGN_UP_STATE);
             editor.apply();
             editor.commit();
 

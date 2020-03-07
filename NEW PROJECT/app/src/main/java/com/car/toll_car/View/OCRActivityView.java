@@ -88,7 +88,6 @@ public class OCRActivityView extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 boolean connection =  isNetworkConnected();
                 Log.e("Submit ", String.valueOf(connection));
                 boolean internet = internetConnectionAvailable(3);
@@ -125,16 +124,13 @@ public class OCRActivityView extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which ==0){
-
                     if (!checkCamerapermission()){
                         requestCameraPermission();
                     }else {
                         pickCamera();
                     }
-
                 }
                 if (which ==1){
-
                     if (!checkStoragepermission()){
                         requestStoragePermission();
                     }else {
@@ -167,7 +163,6 @@ public class OCRActivityView extends AppCompatActivity {
     }
 
     private void requestStoragePermission() {
-
         ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE);
     }
 
@@ -336,7 +331,6 @@ public class OCRActivityView extends AppCompatActivity {
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         assert cm != null;
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }

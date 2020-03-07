@@ -269,13 +269,8 @@ public class Profile extends AppCompatActivity {
         StringRequest stringRequest= new StringRequest(Request.Method.POST, UPDATE_URL, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("succesfully")) {
-                    GetLoginData();
-                    Toast.makeText(Profile.this, "Update successfully: " + response, Toast.LENGTH_SHORT).show();
-                } else {
-                    GetLoginData();
-                    Toast.makeText(Profile.this, "Update Error: "+response, Toast.LENGTH_SHORT).show();
-                }
+                GetLoginData();
+                Toast.makeText(Profile.this, "Update: " +response, Toast.LENGTH_SHORT).show();
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override

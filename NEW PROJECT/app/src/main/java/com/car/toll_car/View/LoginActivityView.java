@@ -40,6 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivityView extends AppCompatActivity {
+    private static final int LOGIN_STATE=1;
     private LoginViewModel loginViewModel;
     private EditText mobileText, passwordText;
     private Button signIn;
@@ -149,7 +150,7 @@ public class LoginActivityView extends AppCompatActivity {
                                 SharedPreferences preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putString("Login_Mobile",mobileText.getText().toString());
-                                editor.putInt("Check_login_value",1);
+                                editor.putInt("Check_login_value", LOGIN_STATE);
                                 editor.apply();
                                 editor.commit();
 
@@ -201,9 +202,14 @@ public class LoginActivityView extends AppCompatActivity {
             Toast.makeText(this, "Your login data is empty", Toast.LENGTH_SHORT).show();
         }*/
 
-        SharedPreferences preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
-        int value= preferences.getInt("Check_login_value",0);
-        if (value==1){
+
+
+        SharedPreferences sign_in_preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
+        SharedPreferences sign_up_preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
+        int sign_in_value= sign_in_preferences.getInt("Check_login_value",0);
+        int sign_up_value= sign_up_preferences.getInt("Check_signup_value",0);
+
+        if (sign_in_value== 1 && sign_up_value== 2){
             startActivity(new Intent(this, Dashboard.class));
         }else {
             Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
