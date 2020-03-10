@@ -44,13 +44,17 @@ import retrofit2.Callback;
 
 public class Profile extends AppCompatActivity {
 
+    private static final String TAG = "ProfileActivity";
     private TextView profileName, profileEmail, profilePhone, profileAccount;
     private RequestQueue mRequestQueue;
-    private EditText edName, edEmail, edMobile;
-    private String mobile;
+    private EditText edName, edEmail;
+    private TextView edMobile;
+    String mobile;
     Button btnUpdate;
     private String REQUEST_URL;
     private String login_mobile, sign_up_mobile;
+    String getProperMobile;
+    private int updateCount=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,18 +248,20 @@ public class Profile extends AppCompatActivity {
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         edName= dialog.findViewById(R.id.update_name);
         edEmail= dialog.findViewById(R.id.update_email);
-        edMobile= dialog.findViewById(R.id.update_number);
+        edMobile= dialog.findViewById(R.id.update_number_textView);
         btnUpdate= dialog.findViewById(R.id.btn_update);
 
         edName.setText(profileName.getText().toString());
         edEmail.setText(profileEmail.getText().toString());
+
         mobile= profilePhone.getText().toString();
-        edMobile.setText(profilePhone.getText().toString());
+        getProperMobile= mobile.substring(1);
+        edMobile.setText(getProperMobile);
+        Log.e(TAG, "UpdateMobile: "+getProperMobile);
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 UpdatePost();
                 dialog.dismiss();
             }
@@ -271,6 +277,7 @@ public class Profile extends AppCompatActivity {
             public void onResponse(String response) {
                 GetLoginData();
                 Toast.makeText(Profile.this, "Update: " +response, Toast.LENGTH_SHORT).show();
+
             }
         }, new com.android.volley.Response.ErrorListener() {
             @Override
@@ -284,11 +291,12 @@ public class Profile extends AppCompatActivity {
                 String put_name = edName.getText().toString().trim();
                 String put_email = edEmail.getText().toString().trim();
                 String put_mobile = edMobile.getText().toString();
-
+                login_mobile= put_mobile;
                 params.put("mobile", put_mobile);
                 params.put("name", put_name);
                 params.put("email", put_email);
 
+                Log.e(TAG,"Put Mobile: "+put_mobile);
                 return params;
             }
         };

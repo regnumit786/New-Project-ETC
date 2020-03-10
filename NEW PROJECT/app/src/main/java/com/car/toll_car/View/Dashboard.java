@@ -52,16 +52,15 @@ import retrofit2.Call;
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawer;
-    private ApiClint apiClint;
-    private String mobile_pass;
+    private String Car_Registration, Vehicles_Type;
     private static final String TAG= "Dashboard";
     private RequestQueue requestQueue;
-    RecleAdapter recleAdapter;
+    private RecyclerAdapter recyclerAdapter;
     private static final String URL= "http://192.168.50.17/RFIDApicbank/singleall.php?reg_no=Jassore_Metro_LA_1_4896";
     private List<Car_Detail> car_details;
     private RecyclerView recyclerView;
 
-    //private TextView regNo, vehicleClass, tollRate, dateTime;
+    private TextView carRegistration, vehicleType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +80,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
-        /*regNo= findViewById(R.id.reg_no);
-        vehicleClass= findViewById(R.id.vehicle_class);
-        tollRate= findViewById(R.id.toll_rate);
-        dateTime= findViewById(R.id.date_time);*/
-
+        carRegistration= findViewById(R.id.car_registration_title);
+        vehicleType= findViewById(R.id.vehicles_types);
         car_details= new ArrayList<>();
 
-        recyclerView= findViewById(R.id.setrecyler);
+        recyclerView= findViewById(R.id.setTollRateAndDateTime);
         LinearLayoutManager llm= new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setHasFixedSize(true);
@@ -114,9 +108,13 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             startActivity(Intent.createChooser(intent,"Share With"));
         } else if (id== R.id.nav_log_out){
             SharedPreferences sign_in_preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sign_in_preferences.edit();
+            editor.clear();
+            editor.commit();
             SharedPreferences sign_up_preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
-            sign_in_preferences.edit().clear().commit();
-            sign_up_preferences.edit().clear().commit();
+            SharedPreferences.Editor editor1 = sign_up_preferences.edit();
+            editor1.clear();
+            editor1.commit();
             startActivity(new Intent(this, LoginActivityView.class));
         }
         drawer.closeDrawer(GravityCompat.START);
@@ -164,33 +162,27 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 for (int i=0; i<response.length(); i++){
                     try {
                         JSONObject jsonObject= response.getJSONObject(i);
-
                         Car_Detail car_detail= new Car_Detail();
 
-                        car_detail.setReg_no(jsonObject.getString("reg_no"));
-                        car_detail.setVehicle_class(jsonObject.getString("vehicle_class"));
+                        Car_Registration= (jsonObject.getString("reg_no"));
+                        Vehicles_Type= (jsonObject.getString("vehicle_class"));
+
                         car_detail.setToll_rate(jsonObject.getString("toll_rate"));
                         car_detail.setDatetime(jsonObject.getString("datetime"));
-
                         car_details.add(car_detail);
 
-                        Log.e(TAG,jsonObject.getString("reg_no"));
-                        Log.e(TAG,jsonObject.getString("vehicle_class"));
                         Log.e(TAG,jsonObject.getString("toll_rate"));
                         Log.e(TAG,jsonObject.getString("datetime"));
-
-                        /*regNo.setText(jsonObject.getString("reg_no"));
-                        vehicleClass.setText(jsonObject.getString("vehicle_class"));
-                        tollRate.setText(jsonObject.getString("toll_rate"));
-                        dateTime.setText(jsonObject.getString("datetime"));*/
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                recleAdapter= new RecleAdapter(car_details, Dashboard.this);
-                recyclerView.setAdapter(recleAdapter);
-                recleAdapter.notifyDataSetChanged();
+                recyclerAdapter= new RecyclerAdapter(car_details, Dashboard.this);
+                recyclerView.setAdapter(recyclerAdapter);
+                recyclerAdapter.notifyDataSetChanged();
+
+                carRegistration.setText(Car_Registration);
+                vehicleType.setText(Vehicles_Type);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -201,12 +193,12 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         requestQueue.add(arrayRequest);
     }
 
-    public class RecleAdapter extends RecyclerView.Adapter<RecleAdapter.ViewHolder> {
+    public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
         List<Car_Detail> car_details;
         Context context;
 
-        public RecleAdapter(List<Car_Detail> car_details, Context context) {
+        public RecyclerAdapter(List<Car_Detail> car_details, Context context) {
             this.car_details = car_details;
             this.context = context;
         }
@@ -222,8 +214,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Car_Detail car_detail= car_details.get(position);
 
-            holder.regNo.setText(car_detail.getReg_no());
-            holder.vehicleClass.setText(car_detail.getVehicle_class());
             holder.tollRate.setText(car_detail.getToll_rate());
             holder.dateTime.setText(car_detail.getDatetime());
         }
@@ -239,14 +229,10 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-
-            TextView regNo, vehicleClass, tollRate, dateTime;
+            TextView tollRate, dateTime;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-
-                regNo= itemView.findViewById(R.id.reg_no);
-                vehicleClass= itemView.findViewById(R.id.vehicle_class);
                 tollRate= itemView.findViewById(R.id.toll_rate);
                 dateTime= itemView.findViewById(R.id.date_time);
             }

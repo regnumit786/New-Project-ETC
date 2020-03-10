@@ -41,6 +41,7 @@ import retrofit2.Response;
 
 public class LoginActivityView extends AppCompatActivity {
     private static final int LOGIN_STATE=1;
+    private static final String TAG = "LoginActivity";
     private LoginViewModel loginViewModel;
     private EditText mobileText, passwordText;
     private Button signIn;
@@ -70,6 +71,12 @@ public class LoginActivityView extends AppCompatActivity {
         LoginValidityCheck();
         if (count>0){
             PostLoginUsingVolley();
+            ///Store sharepreference data
+            SharedPreferences sign_in_preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor= sign_in_preferences.edit();
+            editor.putString("Login_Mobile", mobileText.getText().toString());
+            editor.putInt("Check_login_value",1);
+            editor.apply();
         }
     }
 
@@ -144,18 +151,8 @@ public class LoginActivityView extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
                             if (response.equals("success")) {
-                                /**
-                                 * mobile number store sharedpreferences for query profile url
-                                 */
-                                SharedPreferences preferences = getSharedPreferences("Login_DataDemoStore", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("Login_Mobile",mobileText.getText().toString());
-                                editor.putInt("Check_login_value", LOGIN_STATE);
-                                editor.apply();
-                                editor.commit();
-
                                 Intent intent= new Intent(LoginActivityView.this, Dashboard.class);
-                                Log.e("Login_mobile",mobileText.getText().toString().trim());
+                                Log.e("Login_mobile: ",mobileText.getText().toString().trim());
                                 startActivity(intent);
                                 Toast.makeText(LoginActivityView.this, "Login successfully: " + response, Toast.LENGTH_SHORT).show();
                             } else {
@@ -192,27 +189,44 @@ public class LoginActivityView extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        /*SQLiteHelper helper= new SQLiteHelper(this);
-        Cursor cursor= helper.DisplayData();
-        if (cursor.getCount()!=0){
-            Log.e("CoursorData",String.valueOf(cursor.getCount()));
-            startActivity(new Intent(this,Dashboard.class));
-            finish();
-        }else {
-            Toast.makeText(this, "Your login data is empty", Toast.LENGTH_SHORT).show();
-        }*/
-
-
-
         SharedPreferences sign_in_preferences = getSharedPreferences(getString(R.string.loginStore), Context.MODE_PRIVATE);
         SharedPreferences sign_up_preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
         int sign_in_value= sign_in_preferences.getInt("Check_login_value",0);
         int sign_up_value= sign_up_preferences.getInt("Check_signup_value",0);
-
-        if (sign_in_value== 1 && sign_up_value== 2){
+        if (sign_in_value == 1 || sign_up_value== 2){
             startActivity(new Intent(this, Dashboard.class));
         }else {
             Toast.makeText(this, "Please Log in", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "OnPause", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "OnStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "OnRestart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "OnDestroy", Toast.LENGTH_SHORT).show();
+    }*/
 }

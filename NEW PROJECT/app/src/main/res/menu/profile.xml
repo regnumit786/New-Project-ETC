@@ -5,5 +5,5 @@
         android:id="@+id/action_update"
         android:orderInCategory="100"
         android:title="@string/action_update"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

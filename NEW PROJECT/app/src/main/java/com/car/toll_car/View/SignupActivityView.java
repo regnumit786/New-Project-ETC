@@ -95,23 +95,12 @@ public class SignupActivityView extends AppCompatActivity {
             PostDataUsingVolley();
             Log.e("TAG count", String.valueOf(count));
 
-            SharedPreferences preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("Sign_up_Mobile", inputNumber.getText().toString().trim());
-            editor.putInt("Check_signup_value", SIGN_UP_STATE);
+            SharedPreferences sign_up_preferences = getSharedPreferences(getString(R.string.signupStore), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor= sign_up_preferences.edit();
+            editor.putString("Sign_up_Mobile",inputNumber.getText().toString());
+            editor.putInt("Check_signup_value",2);
             editor.apply();
-            editor.commit();
-
-
-            /*PostApi(inputName.getText().toString(), inputEmail.getText().toString(),
-                    inputPassword.getText().toString(), inputNumber.getText().toString());*/
-
-            /**number= inputNumber.getText().toString().trim();
-             if (number.isEmpty() || number.length() < 11) {
-             inputNumber.setError("Valid number is required");
-             inputNumber.requestFocus();
-             }
-             String phoneNumber= "+88" + number;
+             /**String phoneNumber= "+88" + number;
              intent.putExtra("phoneNumber",phoneNumber);
              Log.e("Verification_Number",phoneNumber);*/
             setNullEditText();
@@ -230,23 +219,10 @@ public class SignupActivityView extends AppCompatActivity {
         inputRePassword.setText("");
     }
 
-    private void DataStore() {
-        preferences = getSharedPreferences("LogedDataStore", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("LogedName", inputName.getText().toString());
-        editor.putString("LogedEmail", inputEmail.getText().toString());
-        editor.putString("LogedMobile", inputNumber.getText().toString());
-        editor.putString("LogedPassword", inputPassword.getText().toString());
-        editor.putString("LogedrePassword", inputRePassword.getText().toString());
-        editor.putInt("OTP_PIN", randomOTPnumber);
-        editor.apply();
-        editor.commit();
-    }
-
     @Override
     public void onBackPressed() {
         if (backPressTime + 2000 > System.currentTimeMillis()) {
-            super.onBackPressed();
+            //super.onBackPressed();
             finish();
         } else {
             Toast.makeText(this, "press again for exit", Toast.LENGTH_SHORT).show();

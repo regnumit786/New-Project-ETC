@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,66 +11,132 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:paddingTop="55sp"
+        android:paddingTop="56sp"
+        android:paddingStart="8sp"
+        android:paddingEnd="8sp"
         android:layout_weight="3">
 
-        <ImageView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/logo"/>
+            app:cardCornerRadius="5sp"
+            app:cardElevation="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0sp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0sp"
+                        android:layout_weight="1"
+                        android:text="@string/registration_type"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/car_registration_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="0sp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:text="@string/registration_type"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1sp"
+                    android:background="@color/black"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0sp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0sp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:text="@string/vehicles_type"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/vehicles_types"
+                        android:layout_width="match_parent"
+                        android:layout_height="0sp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:text="@string/motor_cycle"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_weight="5"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_weight=".6"
+        app:cardElevation="10sp"
+        app:cardCornerRadius="5sp"
+        android:layout_marginTop="5sp"
+        android:layout_marginStart="8sp"
+        android:layout_marginEnd="8sp">
 
-        <TextView
-            android:id="@+id/reg_no"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_margin="10sp"
-            android:text="@string/regnumTitle"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/vehicle_class"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_margin="10sp"
-            android:text="@string/regnumTitle"
-            android:layout_marginTop="10sp"/>
+            <TextView
+                android:layout_width="0sp"
+                android:layout_weight=".7"
+                android:layout_height="match_parent"
+                android:text="@string/toll_rate"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:gravity="center"/>
 
-        <TextView
-            android:id="@+id/toll_rate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_margin="10sp"
-            android:text="@string/regnumTitle"
-            android:layout_marginTop="10sp"/>
+            <View
+                android:layout_width="1sp"
+                android:background="@color/black"
+                android:layout_height="match_parent"/>
 
-        <TextView
-            android:id="@+id/date_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:layout_margin="10sp"
-            android:text="@string/regnumTitle"
-            android:layout_marginTop="10sp"/>
+            <TextView
+                android:layout_width="0sp"
+                android:layout_weight="1.3"
+                android:layout_height="match_parent"
+                android:text="@string/date_time"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:gravity="center"/>
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/setrecyler"
+        android:id="@+id/setTollRateAndDateTime"
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_weight="7"
+        android:layout_weight="6.4"
         android:orientation="vertical">
 
     </androidx.recyclerview.widget.RecyclerView>
